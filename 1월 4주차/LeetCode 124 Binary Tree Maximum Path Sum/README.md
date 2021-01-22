@@ -31,15 +31,82 @@ Note that the path does not need to pass through the root.
 
     ![LeetCode%20124%20Binary%20Tree%20Maximum%20Path%20Sum%20b9c425902a984d87b59e62f95bca7dc1/Untitled%201.png](LeetCode%20124%20Binary%20Tree%20Maximum%20Path%20Sum%20b9c425902a984d87b59e62f95bca7dc1/Untitled%201.png)
 
-# Solve
+# Solve 2 다시풀기
+
+96 ms → 32 ms
+
+only Left,  only Right 는 고려할 필요가 없다.
+
+- 중간에 Return 하기전 최대가 될 수 있는 값은 mid + left + right
+
+    ```java
+    int currentMax = max(midLeftRight, max(mid, max(midLeft,midRight)));
+    maximum = (maximum < currentMax ? currentMax : maximum);
+
+    if(currentMax == midLeftRight) return max(midLeft,midRight);
+    return currentMax;
+    ```
+
+- 그 이후에 Return 할 때는 무조건 mid가 포함되어야 하기 때문에
+    1. mid + left
+
+        ```java
+         int midLeft = (now->left ? dfs(now->left) + mid : -2147483648);
+        ```
+
+    2. mid + right
+
+        ```java
+        int midRight = (now->right ? dfs(now->right) + mid : -2147483648);
+        ```
+
+    3. mid
+
+        ```java
+        int mid = now->v
+        ```
+
+    만 고려.
+
+```java
+#include <algorithm>
+#define minimum -2147483648
+class Solution {
+public:
+    int maximum;
+    int dfs(TreeNode* now){
+        
+        int mid = now->val;
+        int midLeft = (now->left ? dfs(now->left) + mid : -2147483648);
+        int midRight = (now->right ? dfs(now->right) + mid : -2147483648);
+        int midLeftRight = (now->left && now->right ? midLeft+midRight-mid : -2147483648);
+        
+        int currentMax = max(midLeftRight, max(mid, max(midLeft,midRight)));
+        maximum = (maximum < currentMax ? currentMax : maximum);
+        
+        if(currentMax == midLeftRight) return max(midLeft,midRight);
+        return currentMax;
+    }
+    
+    int maxPathSum(TreeNode* root) {
+        maximum = root->val;
+        dfs(root);
+        return maximum;
+    }
+};
+```
+
+# =====================끝
+
+# ~~Solve~~
 
 1. DFS를 쓸건데, 
 
     root에서는 left, right로 재귀를 하여 가장 큰 값들을 받아 올 것이다.
 
     - 가장 큰 값인지 확인해야하는 경우의 수
-    1. 오직 Left 에서 오는 값.
-    2. 오직 Right 에서 오는 값.
+    1. ~~오직 Left 에서 오는 값.~~
+    2. ~~오직 Right 에서 오는 값.~~
     3. 오직 현재 Mid 의 값.
     4. Mid 와 Left 값을 합친 값.
     5. Mid 와 Right 값을 합친 값.
