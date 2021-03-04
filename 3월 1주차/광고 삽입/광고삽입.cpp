@@ -61,7 +61,7 @@ void logAnalasis(vector<string> logs){
         endTime = splited[1];
         int logS = strToInt(startTime);
         int logE = strToInt(endTime);
-        for(int i=logS; i<=logE; i++){
+        for(int i=logS+1; i<=logE; i++){
             histograms[i]++;
         }
     }
